@@ -9,15 +9,17 @@ exports.init = function(app) {
         var paths = app.get('templates') || [];
 
         for (var i = 0; i < paths.length; ++i) {
-            var template = path.join(paths[i], template_path + '.jade');
-            if (fs.existsSync(template)) {
+            if (this.filename.indexOf(paths[i]) == -1) {
+                continue;
+            }
+            var template_file = path.join(paths[i], template_path + '.jade');
+            if (fs.existsSync(template_file)) {
                 this.options.basedir = paths[i];
                 return _resolvePath.apply(this, [path.join('/', template_path), purpose]);
             }
         }
-
-        this.options.basedir = app.get('views');
-        return _resolvePath(this. arguments);
+        this.options.basedir = app.get('default_views');
+        return _resolvePath.apply(this, [path.join('/', template_path), purpose]);
     };
 
     app.addTemplatesPath = function(templates_path) {
@@ -35,7 +37,7 @@ exports.renderOverride = function(req, res, next) {
         var paths = app.get('templates') || [],
             template_name = arguments[0] + '.jade',
             template_dir = null;
-        paths.push(app.get('views'));
+        paths.push(app.get('default_views'));
 
         for (var i = 0; i < paths.length; ++i) {
             if (fs.existsSync(path.join(paths[i], template_name))) {
