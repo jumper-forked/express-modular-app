@@ -41,8 +41,7 @@ if ('development' == app.get('env')) {
 var modules = [
     'tfinder',
     'users',
-    'blog',
-    'somestuff'];
+    'blog'];
 
 for (var i = 0; i < modules.length; i++) {
     try {
